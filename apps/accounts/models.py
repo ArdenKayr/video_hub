@@ -8,6 +8,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from .managers import UserManager
 
 
 class User(AbstractUser):
@@ -55,6 +56,8 @@ class User(AbstractUser):
         auto_now=True
     )
     
+    objects = UserManager()
+
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
