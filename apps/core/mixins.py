@@ -10,14 +10,8 @@ from django.urls import reverse_lazy
 
 
 class EmailVerificationRequiredMixin:
-    """
-    Mixin that requires user's email to be verified.
-    
-    Redirects to email verification page if email is not verified.
-    """
-    
     verification_url = reverse_lazy('accounts:resend_verification')
-    
+
     def dispatch(self, request, *args, **kwargs):
         """Check if user's email is verified."""
         if request.user.is_authenticated and not request.user.email_verified:
@@ -30,12 +24,6 @@ class EmailVerificationRequiredMixin:
 
 
 class AjaxResponseMixin:
-    """
-    Mixin to add AJAX support to views.
-    
-    Useful for HTMX integration.
-    """
-    
     def is_ajax(self):
         """Check if request is AJAX/HTMX request."""
         return (

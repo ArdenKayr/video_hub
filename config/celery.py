@@ -1,3 +1,5 @@
+# config/celery.py
+
 """
 Celery configuration for VideoHub project.
 """

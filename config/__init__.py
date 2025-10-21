@@ -1,3 +1,5 @@
+# config/__init__.py
+
 """
 VideoHub configuration package.
 """
