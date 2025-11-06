@@ -133,13 +133,15 @@
     {% if has_video %}
     <div class="video-container mb-8">
         <video id="videoPlayer"
-               class="video-player"
-               {% if movie.video_file %}
-               src="{% url 'player:stream' movie.slug %}"
-               {% elif movie.video_url %}
-               src="{{ movie.video_url }}"
-               {% endif %}
-               preload="metadata">
+            class="video-player"
+            {% if stream_info and stream_info.stream_url %}
+            src="{{ streaming_service_url }}{{ stream_info.stream_url }}"
+            {% elif movie.video_file %}
+            src="{% url 'player:stream' movie.slug %}"
+            {% elif movie.video_url %}
+            src="{{ movie.video_url }}"
+            {% endif %}
+            preload="metadata">
             Your browser does not support the video tag.
         </video>
 

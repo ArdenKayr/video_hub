@@ -195,3 +195,13 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
+
+STREAMING_SERVICE_URL = config(
+    'STREAMING_SERVICE_URL',
+    default='http://localhost:8001'
+)
+# FastAPI Streaming Service
+STREAMING_SERVICE_URL = config(
+    'STREAMING_SERVICE_URL',
+    default='http://localhost:8001'
+)

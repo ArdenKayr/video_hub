@@ -14,6 +14,7 @@ from django.views import View
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 import json
+import requests
 
 from apps.movies.models import Movie
 from .models import WatchHistory
@@ -33,7 +34,7 @@ class VideoPlayerView(View):
             slug=slug
         )
 
-        # Get user's watch progress if authenticated
+        # СНАЧАЛА watch_history
         watch_history = None
         if request.user.is_authenticated:
             watch_history = WatchHistory.objects.filter(
@@ -41,10 +42,25 @@ class VideoPlayerView(View):
                 movie=movie
             ).first()
 
+        # ПОТОМ stream_info
+        stream_info = None
+        try:
+            response = requests.get(
+                f'{STREAMING_SERVICE_URL}/api/v1/movies/{slug}/stream-info',
+                timeout=5
+            )
+            if response.status_code == 200:
+                stream_info = response.json()
+        except Exception as e:
+            print(f"FastAPI error: {e}")
+            stream_info = None
+
         context = {
             'movie': movie,
             'watch_history': watch_history,
             'has_video': bool(movie.video_url or movie.video_file),
+            'stream_info': stream_info,
+            'streaming_service_url': STREAMING_SERVICE_URL,
         }
 
         return render(request, self.template_name, context)
@@ -173,3 +189,7 @@ def continue_watching(request: HttpRequest) -> HttpResponse:
     return render(request, 'player/continue_watching.html', {
         'history': history
     })
+
+from django.conf import settings
+
+STREAMING_SERVICE_URL = getattr(settings, 'STREAMING_SERVICE_URL', 'http://localhost:8001')
